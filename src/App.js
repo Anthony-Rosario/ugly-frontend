@@ -1,40 +1,31 @@
-import React, { Component } from 'react';
-import request from 'superagent'
-
+import React, { Component } from 'react'
+import {
+    BrowserRouter as Router, 
+    Route, 
+    Switch,
+} from 'react-router-dom';
+import ProductPage from './ProductPage.js';
+import DetailPage from './DetailPage.js';
 
 export default class App extends Component {
-  state = {
-    skateboards: [],
-  }
-
-
-  componentDidMount = async () => {
-    await this.fetchSkateBoards();
-  }
-
-
-  fetchSkateBoards = async () => {
-    const data = await request.get('https://express-dummy-data.herokuapp.com/skateboards')
-
-    this.setState({
-      skateboards: data.body.result,
-    })
-  }
-
-
-render() {
-
-  const skateboards = this.state.skateboards;
-  const boardRender = skateboards.map(board => {return <p>{board.name} {board.image}</p>})
-
-  console.log(skateboards)
-
-  return (
-    <div>
-      {boardRender}
-    </div>
-  );
+    render() {
+        return (
+            <div>
+                <Router>
+                    <Switch>
+                        <Route 
+                            path="/" 
+                            exact
+                            render={(routerProps) => <ProductPage {...routerProps} />} 
+                        />
+                        <Route 
+                          path="/:id" 
+                          exact
+                          render={(routerProps) => <DetailPage {...routerProps} />} 
+                        />
+                    </Switch>
+                </Router>
+            </div>
+        )
+    }
 }
-}
-
-
